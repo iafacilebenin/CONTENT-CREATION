@@ -1,0 +1,425 @@
+\<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Favicon SVG avec IA.BJ -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%23f59e0b'/><stop offset='100%25' style='stop-color:%23d97706'/></linearGradient></defs><rect width='200' height='200' rx='40' fill='url(%23g)'/><text x='100' y='95' font-size='70' text-anchor='middle' font-family='Arial Black' fill='%23000' font-weight='900'>IA</text><text x='100' y='155' font-size='35' text-anchor='middle' font-family='Arial' fill='%23000' font-weight='700'>.BJ</text></svg>">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://geminiartfacile.pages.dev/">
+    <meta property="og:title" content="IA Facile : De l'Idée à l'Icône au Bénin">
+    <meta property="og:description" content="Formation interactive + Générateur d'images IA intégré. Apprenez et créez sans quitter cette page. 100% Gratuit.">
+    <meta property="og:image" content="https://image.pollinations.ai/prompt/IA%20FACILE%20logo%20moderne,%20gradient%20orange,%20fond%20tech%20noir,%20letters%20IA.BJ?width=1200&height=630&nologo=true">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://geminiartfacile.pages.dev/">
+    <meta name="twitter:title" content="IA Facile : De l'Idée à l'Icône">
+    <meta name="twitter:description" content="Formation + Générateur IA en un seul endroit">
+    <meta name="twitter:image" content="https://image.pollinations.ai/prompt/IA%20FACILE%20logo%20moderne,%20gradient%20orange,%20fond%20tech%20noir,%20letters%20IA.BJ?width=1200&height=630&nologo=true">
+    
+    <title>IA Facile : De l'Idée à l'Icône au Bénin</title>
+    <meta name="description" content="Formation interactive : De l'Idée à l'Icône. Maîtrisez l'IA générative.">
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f0f13; color: #e2e8f0; }
+        h1, h2, h3, h4, .font-heading { font-family: 'Space Grotesk', sans-serif; }
+        .gradient-text { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .google-chip { transition: all 0.3s ease; }
+        .google-chip:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3); }
+        .pattern-bg { background-image: radial-gradient(#333 1px, transparent 1px); background-size: 20px 20px; }
+        .check-anim { animation: scaleIn 0.3s ease-out forwards; }
+        @keyframes scaleIn { 0% { transform: scale(0); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        .wa-pulse { animation: pulse-green 2s infinite; }
+        @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
+        @keyframes shimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }
+        .loading-shimmer { background: linear-gradient(90deg, #1a1a20 25%, #2a2a30 50%, #1a1a20 75%); background-size: 1000px 100%; animation: shimmer 2s infinite; }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; font-family: sans-serif;">
+            <div style="font-size: 24px; margin-bottom: 20px;">Chargement du cours...</div>
+            <div style="font-size: 14px; color: #888;">Si ce message reste affiché plus de 10 secondes, vérifiez votre connexion.</div>
+        </div>
+    </div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const coachWhatsapp = "2290151017042"; 
+        const welcomeMessage = "Bonjour Coach, je suis bloqué sur le module...";
+
+        const IconBase = ({ children, size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
+        );
+
+        const Sparkles = (props) => <IconBase {...props}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M9 3v4"/><path d="M5 3h4"/></IconBase>;
+        const Zap = (props) => <IconBase {...props}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></IconBase>;
+        const Palette = (props) => <IconBase {...props}><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></IconBase>;
+        const Camera = (props) => <IconBase {...props}><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></IconBase>;
+        const Cpu = (props) => <IconBase {...props}><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3"/><path d="M15 1v3"/><path d="M9 20v3"/><path d="M15 20v3"/><path d="M20 9h3"/><path d="M20 14h3"/><path d="M1 9h3"/><path d="M1 14h3"/></IconBase>;
+        const ShieldCheck = (props) => <IconBase {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></IconBase>;
+        const Film = (props) => <IconBase {...props}><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></IconBase>;
+        const Flag = (props) => <IconBase {...props}><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></IconBase>;
+        const ArrowRight = (props) => <IconBase {...props}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></IconBase>;
+        const Repeat = (props) => <IconBase {...props}><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></IconBase>;
+        const Lock = (props) => <IconBase {...props}><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></IconBase>;
+        const Menu = (props) => <IconBase {...props}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></IconBase>;
+        const X = (props) => <IconBase {...props}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></IconBase>;
+        const Check = (props) => <IconBase {...props}><polyline points="20 6 9 17 4 12"/></IconBase>;
+        const Trophy = (props) => <IconBase {...props}><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10"/><path d="M17 4v8a5 5 0 0 1-10 0V4"/><path d="M7 4H3v6a5 5 0 0 0 5 5v-1"/><path d="M17 4h4v6a5 5 0 0 1-5 5v-1"/></IconBase>;
+        const MessageCircle = (props) => <IconBase {...props}><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></IconBase>;
+        const Download = (props) => <IconBase {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></IconBase>;
+        const Image = (props) => <IconBase {...props}><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></IconBase>;
+
+       
+      const ImageGenerator = ({ defaultPrompt = "" }) => {
+    const [prompt, setPrompt] = useState(defaultPrompt);
+    const [loading, setLoading] = useState(false);
+    const [imageUrl, setImageUrl] = useState(null);
+    const [error, setError] = useState(null);
+
+    const generateImage = async () => {
+        if (!prompt.trim()) { setError("Veuillez entrer une description"); return; }
+        setError(null);
+        setImageUrl(null);
+        setLoading(true);
+        try {
+            const response = await fetch('/api/image', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt })
+            });
+            if (!response.ok) throw new Error('Erreur');
+            const blob = await response.blob();
+            setImageUrl(URL.createObjectURL(blob));
+        } catch (e) {
+            setError("Erreur génération. Réessayez.");
+        }
+        setLoading(false);
+    };
+
+    return (
+        <div className="my-8 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl p-6">
+            <div className="flex items-center gap-2 mb-4">
+                <Image size={20} className="text-purple-400" />
+                <h4 className="text-lg font-bold text-purple-300">🎨 Pratique Instantanée</h4>
+            </div>
+            <textarea
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                className="w-full bg-black/40 border border-white/20 rounded-lg p-4 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none resize-none"
+                rows="3"
+                placeholder="Décrivez votre image..."
+            />
+            <button
+                onClick={generateImage}
+                disabled={loading}
+                className="mt-4 w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+                {loading ? (
+                    <>
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        Génération en cours...
+                    </>
+                ) : (
+                    <>
+                        <Sparkles size={20} />
+                        Générer l'image
+                    </>
+                )}
+            </button>
+
+            {error && (
+                <div className="mt-4 bg-red-500/20 border border-red-500/50 text-red-300 p-3 rounded-lg text-sm">
+                    {error}
+                </div>
+            )}
+
+            {loading && !imageUrl && (
+                <div className="mt-6 aspect-square rounded-lg overflow-hidden loading-shimmer"></div>
+            )}
+
+            {imageUrl && (
+                <div className="mt-6 space-y-4">
+                    <img
+                        src={imageUrl}
+                        alt="Generated"
+                        onLoad={() => setLoading(false)}
+                        onError={() => {
+                            setLoading(false);
+                            setError("Erreur génération. Réessayez.");
+                            setImageUrl(null);
+                        }}
+                        className={`w-full rounded-lg shadow-2xl border-2 border-purple-500/50 ${loading ? 'hidden' : 'block'}`}
+                    />
+                    
+   {!loading && (
+    <a
+        href={imageUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-2 rounded-lg transition-all flex items-center justify-center gap-2 block text-center"
+    >
+        <Download size={18} />
+        Télécharger l'image
+    </a>  
+)}
+     </div>
+)}
+             <p className="mt-4 text-xs text-gray-500 text-center">
+                ✨ Propulsé par IA Facile • 100% Gratuit • Illimité
+            </p>
+        </div>
+    );
+};
+
+        const Header = ({ scrollToModule, progress }) => {
+            const [isOpen, setIsOpen] = useState(false);
+            return (
+                <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0f0f13]/90 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex items-center justify-between h-16">
+                            <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-600 rounded-lg flex items-center justify-center text-black font-bold">IA</div>
+                                <span className="font-heading font-bold text-xl tracking-tight">Facile <span className="text-yellow-500 text-sm font-normal">Édition Pro</span></span>
+                            </div>
+                            <div className="hidden md:flex items-center gap-6">
+                                <div className="ml-10 flex items-baseline space-x-4">
+                                    <button onClick={() => scrollToModule(0)} className="px-3 py-2 rounded-md text-sm font-medium hover:text-yellow-400 transition-colors">Intro</button>
+                                    <button onClick={() => scrollToModule(2)} className="px-3 py-2 rounded-md text-sm font-medium hover:text-yellow-400 transition-colors">Technique</button>
+                                    <button onClick={() => scrollToModule(4)} className="px-3 py-2 rounded-md text-sm font-medium hover:text-yellow-400 transition-colors">Pratique</button>
+                                    <button onClick={() => scrollToModule(7)} className="bg-yellow-500 text-black px-4 py-2 rounded-full text-sm font-bold hover:bg-yellow-400 transition-colors">Challenge Final</button>
+                                </div>
+                                <div className="flex flex-col items-end w-32">
+                                    <span className="text-xs text-gray-400 font-medium mb-1">{Math.round(progress)}% Complété</span>
+                                    <div className="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
+                                        <div className="bg-green-500 h-full transition-all duration-500 ease-out" style={{ width: `${progress}%` }}></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="-mr-2 flex md:hidden items-center gap-4">
+                                <div className="w-16">
+                                    <div className="w-full bg-gray-700 h-1.5 rounded-full overflow-hidden">
+                                        <div className="bg-green-500 h-full transition-all duration-500 ease-out" style={{ width: `${progress}%` }}></div>
+                                    </div>
+                                </div>
+                                <button onClick={() => setIsOpen(!isOpen)} className="text-gray-300 hover:text-white p-2">
+                                    {isOpen ? <X size={24} /> : <Menu size={24} />} 
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="w-full h-0.5 bg-gray-800">
+                         <div className="bg-gradient-to-r from-yellow-400 to-orange-500 h-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
+                    </div>
+                    {isOpen && (
+                         <div className="md:hidden bg-[#1a1a20] border-b border-white/10">
+                            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                                <button onClick={() => {scrollToModule(0); setIsOpen(false)}} className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/10 w-full text-left">Intro</button>
+                                <button onClick={() => {scrollToModule(2); setIsOpen(false)}} className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/10 w-full text-left">Technique</button>
+                                <button onClick={() => {scrollToModule(4); setIsOpen(false)}} className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/10 w-full text-left">Pratique</button>
+                            </div>
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        const Hero = ({ startCourse }) => (
+            <div className="relative min-h-screen flex items-center justify-center overflow-hidden pattern-bg pt-16">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0f0f13]/50 to-[#0f0f13]"></div>
+                <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-600/10 rounded-full blur-3xl"></div>
+                <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
+                    <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 mb-8 backdrop-blur-sm">
+                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        <span className="text-sm font-medium text-gray-300">Apprendre + Pratiquer en Un Seul Endroit</span>
+                    </div>
+                    <h1 className="text-5xl md:text-7xl font-bold font-heading mb-6 leading-tight">De l'Idée à l'Icône : <br/><span className="gradient-text">Maîtriser l'IA Générative au Bénin</span></h1>
+                    <p className="text-xl md:text-2xl text-gray-400 mb-10 max-w-2xl mx-auto font-light">Cours interactif + Générateur d'images intégré. Apprenez, pratiquez, créez - sans quitter cette page.</p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <button onClick={startCourse} className="group relative bg-white text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] flex items-center gap-2">Commencer le Module 1 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" /></button>
+                        <span className="text-sm text-gray-500 mt-2 sm:mt-0">100% Gratuit • Images Illimitées</span>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const ModuleCard = ({ id, number, title, icon: Icon, children, color = "blue", isCompleted, onToggleComplete }) => {
+            const colors = { blue: "from-blue-500/20 to-cyan-500/5 border-blue-500/30", purple: "from-purple-500/20 to-pink-500/5 border-purple-500/30", yellow: "from-yellow-500/20 to-orange-500/5 border-yellow-500/30", green: "from-green-500/20 to-emerald-500/5 border-green-500/30", red: "from-red-500/20 to-rose-500/5 border-red-500/30" };
+            return (
+                <div className={`relative bg-gradient-to-br ${colors[color]} border backdrop-blur-sm rounded-2xl p-6 md:p-8 mb-12 transition-all duration-300 ${isCompleted ? 'opacity-70 grayscale-[0.3]' : 'opacity-100'}`}>
+                    <div className="absolute -top-5 left-6 flex gap-2">
+                         <div className="bg-[#0f0f13] border border-white/10 px-4 py-1.5 rounded-full flex items-center gap-2"><span className="text-xs font-bold uppercase tracking-wider text-gray-400">Module {number}</span></div>
+                        {isCompleted && (<div className="bg-green-500 text-black px-3 py-1.5 rounded-full flex items-center gap-1 check-anim"><Check size={14} strokeWidth={3} /> <span className="text-xs font-bold uppercase">Terminé</span></div>)}
+                    </div>
+                    <div className="flex items-start justify-between mb-6 mt-2">
+                        <div className="flex items-start gap-4"><div className={`p-3 rounded-lg bg-white/5 border border-white/10`}><Icon size={24} className="text-white" /></div><h2 className="text-2xl md:text-3xl font-heading font-bold">{title}</h2></div>
+                        <button onClick={() => onToggleComplete(id)} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${isCompleted ? 'bg-green-500/20 text-green-400 border border-green-500/50 hover:bg-green-500/30' : 'bg-white/10 text-gray-300 border border-white/10 hover:bg-white/20'}`}>{isCompleted ? 'Marquer comme lu' : 'Terminer ce module'}{isCompleted ? <Check size={16} /> : <div className="w-4 h-4 rounded-full border-2 border-current"></div>}</button>
+                    </div>
+                    <div className="space-y-4 text-gray-300 leading-relaxed">{children}</div>
+                </div>
+            );
+        };
+
+        const ChipSimulator = () => {
+            const [chips, setChips] = useState({ sujet: "Reine d'Abomey", details: "perles cybernétiques", style: "néon violet", fond: "Ouidah en 2050" });
+            const alternatives = { sujet: ["Reine d'Abomey", "Guerrier Fon", "Zémidjan Volant"], details: ["perles cybernétiques", "tissu bogolan or", "masque Gelede en verre"], style: ["néon violet", "lumière solaire", "peinture à l'huile"], fond: ["Ouidah en 2050", "Place de l'Étoile Rouge", "Marché Dantokpa"] };
+            const cycleOption = (key) => { const currentIdx = alternatives[key].indexOf(chips[key]); const nextIdx = (currentIdx + 1) % alternatives[key].length; setChips({...chips, [key]: alternatives[key][nextIdx]}); };
+            return (
+                <div className="my-8 bg-black/40 border border-white/10 rounded-xl p-6">
+                    <div className="flex items-center gap-2 mb-4 text-yellow-500 text-sm font-bold uppercase"><Zap size={16} /> Simulateur</div>
+                    <p className="text-sm text-gray-400 mb-4">Cliquez sur les mots surlignés pour changer le prompt.</p>
+                    <div className="bg-white/10 p-4 rounded-lg font-mono text-lg md:text-xl leading-relaxed">
+                        <span className="text-gray-400">Prompt: </span> Portrait de <button onClick={() => cycleOption('sujet')} className="mx-1 px-2 py-0.5 bg-white/20 hover:bg-white/30 text-white rounded-full border border-white/30 google-chip cursor-pointer inline-flex items-center gap-1">{chips.sujet} <span className="text-xs opacity-50">▼</span></button> portant des <button onClick={() => cycleOption('details')} className="mx-1 px-2 py-0.5 bg-white/20 hover:bg-white/30 text-white rounded-full border border-white/30 google-chip cursor-pointer inline-flex items-center gap-1">{chips.details} <span className="text-xs opacity-50">▼</span></button>, ambiance <button onClick={() => cycleOption('style')} className="mx-1 px-2 py-0.5 bg-white/20 hover:bg-white/30 text-white rounded-full border border-white/30 google-chip cursor-pointer inline-flex items-center gap-1">{chips.style} <span className="text-xs opacity-50">▼</span></button>, à <button onClick={() => cycleOption('fond')} className="mx-1 px-2 py-0.5 bg-white/20 hover:bg-white/30 text-white rounded-full border border-white/30 google-chip cursor-pointer inline-flex items-center gap-1">{chips.fond} <span className="text-xs opacity-50">▼</span></button>.
+                    </div>
+                </div>
+            );
+        };
+
+        const TrainingSchedule = () => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                <div className="bg-white/5 border border-white/10 p-5 rounded-xl hover:bg-white/10 transition-colors"><div className="text-yellow-500 font-bold mb-2">Lundi : Le Remix</div><p className="text-sm text-gray-300">Générez un masque Gelede. Transformez la matière.</p></div>
+                <div className="bg-white/5 border border-white/10 p-5 rounded-xl hover:bg-white/10 transition-colors"><div className="text-teal-500 font-bold mb-2">Mardi : La Texture</div><p className="text-sm text-gray-300">Créez un fond d'écran unique.</p></div>
+                <div className="bg-white/5 border border-white/10 p-5 rounded-xl hover:bg-white/10 transition-colors"><div className="text-purple-500 font-bold mb-2">Mercredi : Le Logo</div><p className="text-sm text-gray-300">Créez une enseigne avec texte lisible.</p></div>
+            </div>
+        );
+
+        const SupportButton = () => (
+            <a 
+                href={`https://wa.me/${coachWhatsapp}?text=${encodeURIComponent(welcomeMessage)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="fixed bottom-6 right-6 z-50 group flex items-center justify-center"
+            >
+                <div className="absolute inset-0 bg-green-500 rounded-full wa-pulse opacity-75"></div>
+                <div className="relative bg-[#25D366] hover:bg-[#20bd5a] text-white p-4 rounded-full shadow-2xl transition-all transform group-hover:scale-110 flex items-center gap-2">
+                    <MessageCircle size={28} fill="white" className="text-white" />
+                    <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-out whitespace-nowrap font-bold text-sm">
+                        SOS Coach
+                    </span>
+                </div>
+            </a>
+        );
+
+        const App = () => {
+            const moduleRefs = Array(8).fill(0).map(() => React.createRef());
+            const [completedModules, setCompletedModules] = useState(() => { try { const saved = localStorage.getItem('iafacile_progress_v2'); return saved ? JSON.parse(saved) : []; } catch (e) { return []; } });
+            const totalModules = 8;
+            
+            useEffect(() => {
+                localStorage.setItem('iafacile_progress_v2', JSON.stringify(completedModules));
+                if (completedModules.length === totalModules && window.confetti) {
+                    const duration = 3 * 1000;
+                    const animationEnd = Date.now() + duration;
+                    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+                    const randomInRange = (min, max) => Math.random() * (max - min) + min;
+                    const interval = setInterval(function() {
+                        const timeLeft = animationEnd - Date.now();
+                        if (timeLeft <= 0) return clearInterval(interval);
+                        const particleCount = 50 * (timeLeft / duration);
+                        window.confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                        window.confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                    }, 250);
+                }
+            }, [completedModules]);
+            
+            const toggleModule = (id) => { setCompletedModules(prev => { if (prev.includes(id)) { return prev.filter(m => m !== id); } else { return [...prev, id]; } }); };
+            const progress = (completedModules.length / totalModules) * 100;
+            const isFinished = completedModules.length === totalModules;
+            const scrollToModule = (index) => { if(moduleRefs[index] && moduleRefs[index].current) { moduleRefs[index].current.scrollIntoView({ behavior: 'smooth' }); } };
+
+            return (
+                <div className="min-h-screen text-gray-100 selection:bg-yellow-500 selection:text-black">
+                    <Header scrollToModule={scrollToModule} progress={progress} />
+                    <Hero startCourse={() => scrollToModule(0)} />
+                    <SupportButton />
+
+                    <div className="max-w-4xl mx-auto px-4 py-16 space-y-24">
+                        <div ref={moduleRefs[0]}>
+                            <ModuleCard id={1} number="1" title="La Nouvelle Sorcellerie" icon={Sparkles} color="purple" isCompleted={completedModules.includes(1)} onToggleComplete={toggleModule}>
+                                <p className="text-lg">On arrête d'appeler ça un "logiciel". C'est une <strong>mise à jour de puissance</strong> pour le créateur africain.</p>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+                                    <div className="bg-black/30 p-4 rounded-lg border-l-4 border-red-500"><h3 className="font-bold text-white mb-2">Ce n'est pas...</h3><p className="text-sm">Un robot qui vole votre travail.</p></div>
+                                    <div className="bg-black/30 p-4 rounded-lg border-l-4 border-green-500"><h3 className="font-bold text-white mb-2">C'est...</h3><p className="text-sm">Un studio de 50 artistes dans votre poche.</p></div>
+                                </div>
+                                <ImageGenerator defaultPrompt="Un masque Gelede traditionnel béninois transformé en sculpture de verre transparent, lumière néon violet, fond sombre" />
+                            </ModuleCard>
+                        </div>
+
+                        <div ref={moduleRefs[1]}>
+                            <ModuleCard id={2} number="2" title="La Boucle Créative" icon={Repeat} color="yellow" isCompleted={completedModules.includes(2)} onToggleComplete={toggleModule}>
+                                <p>Le Framework en 3 Étapes pour passer de l'idée à l'icône.</p>
+                                <div className="flex flex-col md:flex-row gap-4 my-8">
+                                    <div className="flex-1 bg-white/5 p-4 rounded-lg border border-white/10"><div className="text-2xl font-bold text-yellow-500 mb-1">01</div><div className="font-bold text-white mb-2">Capturer</div><p className="text-sm">Observer les détails autour de vous.</p></div><div className="hidden md:flex items-center text-gray-600"><ArrowRight /></div>
+                                    <div className="flex-1 bg-white/5 p-4 rounded-lg border border-white/10"><div className="text-2xl font-bold text-yellow-500 mb-1">02</div><div className="font-bold text-white mb-2">Casser</div><p className="text-sm">[Sujet] + [Détails] + [Style].</p></div><div className="hidden md:flex items-center text-gray-600"><ArrowRight /></div>
+                                    <div className="flex-1 bg-white/5 p-4 rounded-lg border border-white/10"><div className="text-2xl font-bold text-yellow-500 mb-1">03</div><div className="font-bold text-white mb-2">Créer</div><p className="text-sm">Changez un mot, changez tout.</p></div>
+                                </div>
+                                <ChipSimulator />
+                                <div className="bg-yellow-500/10 border border-yellow-500/30 p-4 rounded-lg mt-6"><strong className="text-yellow-500 flex items-center gap-2 mb-2"><Flag size={18}/> Mission 01</strong><p className="text-sm font-mono bg-black/50 p-3 rounded text-gray-300 mb-4">"Une version cyberpunk de la place de l'Étoile Rouge à Cotonou, néons, nuit pluvieuse, style anime."</p></div>
+                                <ImageGenerator defaultPrompt="Une version cyberpunk de la place de l'Étoile Rouge à Cotonou, néons, nuit pluvieuse, style anime" />
+                            </ModuleCard>
+                        </div>
+
+                        <div ref={moduleRefs[2]}>
+                            <ModuleCard id={3} number="3" title="L'Alchimie Avancée" icon={Cpu} color="blue" isCompleted={completedModules.includes(3)} onToggleComplete={toggleModule}>
+                                <div className="space-y-8">
+                                    <div><h3 className="flex items-center gap-2 font-bold text-white text-lg mb-2"><Lock size={18} className="text-blue-400"/> Le "Seed Lock"</h3><p>Gardez le prompt, changez juste un détail.</p></div>
+                                    <div><h3 className="flex items-center gap-2 font-bold text-white text-lg mb-2"><span className="text-blue-400">Aa</span> Le Texte dans l'Image</h3><p className="mb-4">L'IA moderne excelle avec l'écriture.</p></div>
+                                </div>
+                                <ImageGenerator defaultPrompt="Une boutique de rue à Cotonou, panneau en bois écrit 'IA FACILE' en lettres peintes à la main, style réaliste, détails précis" />
+                            </ModuleCard>
+                        </div>
+
+                        <div ref={moduleRefs[3]}>
+                            <ModuleCard id={4} number="4" title="Zéro à Héros" icon={Camera} color="green" isCompleted={completedModules.includes(4)} onToggleComplete={toggleModule}>
+                                <p>La créativité est un muscle. Voici votre routine de 10 minutes.</p>
+                                <TrainingSchedule />
+                                <ImageGenerator defaultPrompt="Tissu bogolan traditionnel en gros plan, motifs géométriques détaillés, texture haute définition, fond d'écran 4K" />
+                            </ModuleCard>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div ref={moduleRefs[4]} className="col-span-1"><ModuleCard id={5} number="5" title="Inspiration" icon={Palette} color="purple" isCompleted={completedModules.includes(5)} onToggleComplete={toggleModule}><h3 className="text-xl font-bold font-heading mb-2">L'Architecte du Futur</h3><p className="text-sm text-gray-400 mb-4">Visualisez le futur en 30 secondes.</p></ModuleCard></div>
+                            <div ref={moduleRefs[5]} className="col-span-1"><ModuleCard id={6} number="6" title="Éthique" icon={ShieldCheck} color="green" isCompleted={completedModules.includes(6)} onToggleComplete={toggleModule}><h3 className="text-xl font-bold font-heading mb-2">Le Test d'Originalité</h3><p className="text-sm text-gray-400 mb-4">Votre valeur est le <strong>Concept</strong> et la <strong>Curation</strong>.</p></ModuleCard></div>
+                            <div ref={moduleRefs[6]} className="col-span-1 md:col-span-2"><ModuleCard id={7} number="7" title="Futur-Proofing" icon={Film} color="red" isCompleted={completedModules.includes(7)} onToggleComplete={toggleModule}><h3 className="text-xl font-bold font-heading">Bientôt : Vidéo IA</h3><p className="text-sm text-gray-400 mt-2 max-w-lg">Maîtrisez le texte maintenant pour maîtriser le cinéma demain.</p></ModuleCard></div>
+                        </div>
+
+                        <div ref={moduleRefs[7]} className="text-center py-12">
+                            <div className="relative">
+                                {isFinished && (<div className="absolute -top-20 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce"><Trophy size={64} className="text-yellow-400 drop-shadow-lg" /><span className="bg-yellow-500 text-black px-4 py-1 rounded-full font-bold text-sm mt-2">COURS TERMINÉ !</span></div>)}
+                                <h2 className="text-4xl md:text-5xl font-heading font-bold mb-6 text-white">Votre Projet Final</h2>
+                                <p className="text-xl text-gray-400 mb-10">Créez votre portfolio maintenant.</p>
+                                <div className={`bg-gradient-to-br from-yellow-500 to-orange-600 p-1 rounded-2xl max-w-2xl mx-auto shadow-2xl shadow-orange-500/20 transition-all ${isFinished ? 'scale-105 ring-4 ring-yellow-400/50' : ''}`}>
+                                    <div className="bg-[#0f0f13] rounded-xl p-8">
+                                        <div className="flex justify-between items-start mb-6"><h3 className="text-2xl font-bold text-white">🏆 Challenge Final</h3><button onClick={() => toggleModule(8)} className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold transition-all ${completedModules.includes(8) ? 'bg-green-500 text-black' : 'bg-white/10 text-gray-400 hover:bg-white/20'}`}>{completedModules.includes(8) ? 'Accompli' : 'Marquer fait'}</button></div>
+                                        <ol className="text-left space-y-4 mb-8 text-gray-300"><li className="flex gap-3"><span className="bg-white/10 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0">1</span>Créez 5 images racontant une histoire.</li><li className="flex gap-3"><span className="bg-white/10 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0">2</span>Téléchargez-les.</li><li className="flex gap-3"><span className="bg-white/10 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0">3</span>Postez avec <strong>#IAFacile</strong>.</li></ol>
+                                        <ImageGenerator defaultPrompt="Une série narrative: Le marché Dantokpa au lever du soleil, style photographique documentaire, lumière douce" />
+                                    </div>
+                                </div>
+                            </div>
+                            <p className="mt-12 text-gray-500 text-sm">Vous n'êtes plus spectateur. Vous êtes créateur.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
