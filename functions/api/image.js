@@ -14,7 +14,7 @@ export async function onRequest(context) {
       });
     }
     const hfResponse = await fetch(
-      'https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1',
+      'https://router.huggingface.co/hf-inference/models/stabilityai/stable-diffusion-2-1',
       {
         method: 'POST',
         headers: {
